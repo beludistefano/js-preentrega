@@ -10,7 +10,7 @@ function Actividad(nombre, precio){
 }
 
 let divActividades = document.getElementById('listadecosas')
-let formActividades = document.getElementById('form')
+let formActividades = document.getElementById('formAct')
 let elGasto = document.getElementById('elGasto')
 
 if(localStorage.getItem("Actividades")){
@@ -60,6 +60,20 @@ formActividades.addEventListener("submit", (e) =>{
     <p> ${theNumber} </p>
     `
 
+    Toastify({
+        text: "Se agregó la actividad",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+        onClick: function(){} // Callback after click
+      }).showToast();
+
     formActividades.reset()
 })
 
@@ -77,37 +91,122 @@ actividades.forEach((act, index) =>{
 })
 
 
-// Sección de presupuesto TODAVIA NOOOO
-/*
+// Sección de Presupuesto y Gastos
+
 let presupuestoViaje = 0;
 
-function insertarPresupuesto() {
-    let cantidad = parseInt(prompt("Cual es el presupuesto del viaje?"));
-    presupuestoViaje = presupuestoViaje + cantidad
+let formPresup = document.getElementById('formPresup')
+let elPresu = document.getElementById('elPresu')
+let elDispo = document.getElementById('elDispo')
+
+if(localStorage.getItem("Presup")){
+    presu = JSON.parse(localStorage.getItem("Presup"));
+    presupuestoViaje = presu;
+    console.log(presupuestoViaje)
+    elPresu.innerHTML = `
+        <p> ${presupuestoViaje} </p>
+        `
+} else{
+    localStorage.setItem("Presup", presupuestoViaje)
 }
 
-insertarPresupuesto();
-console.log(presupuestoViaje)
+formPresup.addEventListener("submit", (e) =>{
+    e.preventDefault();
+    let cantidad = document.getElementById("cantPresup").value;
 
-function agregarPlata(){
-    let cantidad = parseInt(prompt("Cuanto querés agregar?"));
-    presupuestoViaje = presupuestoViaje + cantidad
-}
+    presupuestoViaje = presupuestoViaje + parseInt(cantidad)
 
-// agregarPlata()
+    localStorage.setItem("Presup", JSON.stringify(presupuestoViaje))
+    
+    elPresu.innerHTML = `
+        <p> ${presupuestoViaje} </p>
+        `
+    Toastify({
+        text: "Se actualizó tu presupuesto",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+        onClick: function(){} // Callback after click
+        }).showToast();
 
-let misGastos = [];
+    formPresup.reset()
+})
 
-function Gastos(nombre, gasto) {
+let gastos = [];
+let divGastos = document.getElementById('listadegastos')
+let formGasto = document.getElementById('formGasto')
+let gastoTotal = 0;
+let disponible = presupuestoViaje - gastoTotal
+
+function Gasto(nombre, precio){
     this.nombre = nombre;
-    this.gasto = gasto;
+    this.precio = precio
 }
 
-function agregarGasto() {
-    let gasto = prompt("Nombre del gasto")
-    let cantidad = prompt("Valor")
-    let nuevoGasto = new Gastos(gasto, cantidad)
-    misGastos.push(nuevoGasto)
+elDispo.innerHTML = `
+<p> ${disponible} </p>
+`
+
+
+if(localStorage.getItem("Gastos")){
+    gastos = JSON.parse(localStorage.getItem("Gastos"));
+    gastos.forEach((gast, index) => {
+        divGastos.innerHTML += `
+        <div id="gasto${index}">
+        <p>Nombre: ${gast.nombre} Precio: ${gast.precio} </p>
+        </div>
+        `
+        gastoTotal += parseInt(gast.precio);
+        elDispo.innerHTML = `
+        <p> ${disponible} </p>
+        `
+    })
+} else{
+    localStorage.setItem("Gastos", gastos)
 }
 
-// agregarGasto()*/
+formGasto.addEventListener("submit", (e) =>{
+    e.preventDefault();
+    let nombre = document.getElementById("nombreGasto").value;
+    let precio = document.getElementById("precioGasto").value;
+    
+    let gasto = new Gasto(nombre, precio)
+
+    gastos.push(gasto)
+
+    let thisIndex = gastos.findIndex(gast => gast.nombre == nombre)
+    localStorage.setItem("Gastos", JSON.stringify(gastos))
+    
+    divGastos.innerHTML += `
+    <div id="gast${thisIndex}">
+    <p>Nombre: ${gasto.nombre} Precio: ${gasto.precio} </p>
+    </div>
+    `   
+    gastoTotal += parseInt(gasto.precio);
+
+    elDispo.innerHTML = `
+    <p> ${disponible} </p>
+    `
+
+    Toastify({
+        text: "Se agregó tu gasto",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+        onClick: function(){} // Callback after click
+      }).showToast();
+
+    formActividades.reset()
+})
