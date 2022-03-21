@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <meta charset="UTF-8">
     </head>
     <body>
-        <form id="form">
+        <!--TO-DO-->
+        <form id="formAct">
             <p>Ingresa la actividad:</p>
             <input type="text" placeholder="Nombre de la actividad" id="actividad" required>
             <p>Ingresa el precio:</p>
@@ -18,7 +19,37 @@
             <p>Total de gastos:</p>
             <div id="elGasto"></div>
         </div>
-    </body>
 
+
+        <form id="formPresup">
+            <p>Ingresar dinero:</p>
+            <input type="number" placeholder="Cantidad" id="cantPresup" required></br></br></br>
+            <button type="submit">Agregar!</button>
+        </form>
+
+        <h1>Mi Presupuesto:</h1>
+        <div id="presupuesto">
+            <p>Total Ahorrado:</p>
+            <div id="elPresu"></div>
+        </div>
+
+        
+        <form id="formGasto">
+            <p>Ingresa el gasto:</p>
+            <input type="text" placeholder="Nombre del gasto" id="nombreGasto" required>
+            <p>Ingresa el precio:</p>
+            <input type="number" placeholder="Precio" id="precioGasto" required></br></br></br>
+            <button type="submit">Agregar!</button>
+        </form>
+
+        <h1>Actividades Hechas:</h1>
+        <div id="listadegastos"></div>
+
+        <div id="totalDispo">
+            <p>Total Disponible:</p>
+            <div id="elDispo"></div>
+        </div>
+    </body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="index2.js"></script>
 </html>
