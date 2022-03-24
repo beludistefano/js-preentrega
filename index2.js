@@ -98,6 +98,8 @@ let presupuestoViaje = 0;
 let formPresup = document.getElementById('formPresup')
 let elPresu = document.getElementById('elPresu')
 let elDispo = document.getElementById('elDispo')
+let botonUsd = document.getElementById('usd')
+let cotizacion = document.getElementById('cotizacion')
 
 if(localStorage.getItem("Presup")){
     presu = JSON.parse(localStorage.getItem("Presup"));
@@ -138,6 +140,20 @@ formPresup.addEventListener("submit", (e) =>{
     formPresup.reset()
 })
 
+botonUsd.addEventListener("click", (e) =>{
+    e.preventDefault();
+    fetch('https://criptoya.com/api/dolar')
+    .then((promesa) => promesa.json())
+    .then(data =>{
+        let {oficial, blue, solidario} = data;
+        cotizacion.innerHTML = `
+        <p>Oficial: $${oficial}</p>
+        <p>Blue: $${blue}</p>
+        <p>Solidario: $${solidario}</p>
+        `
+    })
+})
+ 
 let gastos = [];
 let divGastos = document.getElementById('listadegastos')
 let formGasto = document.getElementById('formGasto')
